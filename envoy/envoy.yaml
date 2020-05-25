@@ -1,0 +1,53 @@
+static_resources:
+  listeners:
+  - name: main
+    address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 8080
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          stat_prefix: ingress_http
+          codec_type: auto
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: local_service
+              domains:
+              - "*"
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: echo_app
+          http_filters:
+          - name: envoy.filters.http.wasm
+            config:
+              config:
+                name: "rate_limiter"
+                root_id: "rate_limiter"
+                vm_config:
+                  runtime: "envoy.wasm.runtime.v8"
+                  code:
+                    local:
+                      filename: "/etc/proxy_wasm_rate_limit.wasm"
+                  allow_precompiled: true
+          - name: envoy.router
+            config: {}
+  clusters:
+  - name: echo_app
+    connect_timeout: 0.25s
+    type: STRICT_DNS
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: echo_app
+        port_value: 5678
+admin:
+  access_log_path: "/dev/null"
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 9001

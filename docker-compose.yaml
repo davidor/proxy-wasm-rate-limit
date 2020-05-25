@@ -1,0 +1,31 @@
+version: '2'
+services:
+  proxy:
+    build:
+      context: ./envoy
+      dockerfile: Dockerfile
+    volumes:
+      - ./envoy/envoy.yaml:/etc/envoy.yaml
+      - ./target/wasm32-unknown-unknown/release/proxy_wasm_rate_limit.wasm:/etc/proxy_wasm_rate_limit.wasm
+    networks:
+      - envoymesh
+    expose:
+      - "8080"
+      - "9001"
+    ports:
+      - "8080:8080"
+      - "9001:9001"
+  web_service:
+    image: hashicorp/http-echo
+    command:
+      - '-text="hello world"'
+    networks:
+      envoymesh:
+        aliases:
+          - echo_app
+    expose:
+      - "5678"
+    ports:
+      - "5678:5678"
+networks:
+  envoymesh: {}

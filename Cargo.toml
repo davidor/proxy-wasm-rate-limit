@@ -1,0 +1,17 @@
+[package]
+name = "proxy-wasm-rate-limit"
+version = "0.1.0"
+authors = ["David Ortiz <z.david.ortiz@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+proxy-wasm = "0.1.0"
+log = "0.4.8"
+bincode = "1.2"
+serde = "1.0"
+
+limitador = { git = "https://github.com/3scale/limitador", branch = "master", default-features = false }
