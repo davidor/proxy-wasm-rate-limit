@@ -46,7 +46,7 @@ The namespace is the context in which to apply the limit, it could be an API,
 the proxy that forwards the request, etc, but for now this plugin only supports
 a single namespace "proxy_wasm".
 
-The conditions can only use the `==` operand for now. The format for both the
+The conditions can only use the `==` operator for now. The format for both the
 conditions and the variables is as follows:
 - Path: `req.path`.
 - Header: `req.headers._name_of_the_header_`.
