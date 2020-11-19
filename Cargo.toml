@@ -13,5 +13,4 @@ proxy-wasm = "0.1.0"
 log = "0.4.8"
 bincode = "1.2"
 serde = "1.0"
-
-limitador = { git = "https://github.com/3scale/limitador", branch = "master", default-features = false }
+limitador = { version = "0.1.3", default-features = false }
